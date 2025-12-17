@@ -91,3 +91,5 @@ When a request to confirm or cancel an appointment is received, the backend exec
         When the function fetches the appointment to update, it locks that specific row.
 
         Any other process trying to modify that row must wait until the first transaction finishes. This guarantees that the status read by the function is the absolute latest version before the write occurs
+
+# Vercel Link -> https://emr-appointment-management-idw5.vercel.app/
