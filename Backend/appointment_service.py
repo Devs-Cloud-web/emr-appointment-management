@@ -144,24 +144,9 @@ class AppointmentService:
     def get_appointments(self, date_filter: Optional[str] = None, 
                         status_filter: Optional[str] = None) -> List[Dict]:
         """
-        Query function to filter appointments.
         
-        GraphQL Query Structure (simulating AppSync):
-        query GetAppointments($date: String, $status: String) {
-            appointments(date: $date, status: $status) {
-                id
-                patientName
-                date
-                time
-                duration
-                doctorName
-                status
-                mode
-                type
-                description
-                patientEmail
-            }
-        }
+        Query function to filter appointments.
+
         """
         filtered = self.appointments
         
@@ -175,24 +160,13 @@ class AppointmentService:
     
     def update_appointment_status(self, appointment_id: str, new_status: str) -> Dict:
         """
-        Mutation function to update appointment status.
-        
-        GraphQL Mutation Structure:
-        mutation UpdateAppointmentStatus($id: ID!, $status: String!) {
-            updateAppointmentStatus(id: $id, status: $status) {
-                id
-                patientName
-                status
-                updatedAt
-            }
-        }
-        
         In a real implementation with AWS AppSync and Aurora:
         1. This mutation would trigger an AppSync Subscription to notify all 
            subscribed clients of the status change in real-time
         2. The Aurora PostgreSQL would perform a transactional write ensuring
            ACID compliance
         3. The subscription would use WebSocket to push updates to frontend
+       
         """
         for appointment in self.appointments:
             if appointment["id"] == appointment_id:
@@ -201,14 +175,17 @@ class AppointmentService:
                 # Simulating real-time update timestamp
                 appointment["updatedAt"] = datetime.now().isoformat()
                 
-                # In production: This would trigger AppSync subscription
-                # AppSync.subscribe('appointmentUpdates', appointment)
+                """
+                In production: This would trigger AppSync subscription
+                AppSync.subscribe('appointmentUpdates', appointment)
                 
-                # In production: Aurora transactional write would ensure
-                # data consistency across distributed systems
-                # with transaction:
-                #     update_appointment_in_db(appointment_id, new_status)
-                #     log_status_change(appointment_id, new_status)
+                In production: Aurora transactional write would ensure
+                data consistency across distributed systems
+                with transaction:
+                    update_appointment_in_db(appointment_id, new_status)
+                    log_status_change(appointment_id, new_status)
+                
+                """
                 
                 return {
                     "success": True,
